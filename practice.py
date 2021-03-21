@@ -31,6 +31,7 @@ ma = 50
 smaString = "Sma_" + str(ma)
 # Add MA column to df
 
+# Create the MA column with rolling MA with window size of our MA
 df[smaString] = df["Adj Close"].rolling(window=ma).mean()
 #print(df)
 
@@ -42,12 +43,13 @@ print(df)
 numHigher = 0
 numLower = 0
 
-# Iterate through each day(date) to check if closing value is above the ma
-# Since in this df, the dates are the index
+# Iterate through each date to check if closing value is above the MA
+# In this df, the dates are the index row
 for i in df.index:
     #print(df.iloc[:,4][i])
     #print(df['Adj Close'][i])
     #print(df[smaString][i])
+    # If adj close is higher then MA for specific date
     if (df['Adj Close'][i] > df[smaString][i]):
         print("The close is higher than the MA")
         # Count the number of times close price was higher
