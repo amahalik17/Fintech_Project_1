@@ -98,7 +98,7 @@ losses = 0
 loss_count = 0
 total_return = 1
 
-# Iterate through each vslue in percent change list
+# Iterate through each value in percent change list
 for x in percent_change:
     if (x > 0):
         gains += 1
