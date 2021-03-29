@@ -8,6 +8,11 @@ import requests
 import time
 from config import api_key
 
+''' This program is a stock screener that requires the use of the TD Ameritrade API
+and scans for several key factors including:
+
+'''
+
 ###################
 # Get a list of all SnP500 companies and put them in a list(by scraping wiki)
 def get_sp500():
@@ -20,42 +25,20 @@ def get_sp500():
 
 companies = get_sp500()
 # using 10 to speed up debugging process
-companies = companies[0:2]
+companies = companies[0:3]
 # Adding the index to top of list
 #companies.insert(0,'^GSPC')
-
 print(companies)
-
-# # Define a function that get price history data
-# def get_history():
-# 	# define url
-# 	price_url = f'https://api.tdameritrade.com/v1/marketdata/{symbol}/pricehistory'
-# 	# define payload
-# 	payload = {
-# 		'apikey':api_key,
-# 		'periodType': 'year',
-# 		'frequencyType': 'daily',
-# 		'frequency': '1',
-# 		'period': '1',
-# 		'needExtendedHoursData': 'true'
-# 		}
-# 	# Make request
-# 	response = requests.get(price_url, params=payload)
-# 	# convert to dict
-# 	data = response.json()
-# 	return data
-
-
 
 prices = {}
 metrics = {}
-count = 0
+#count = 0
 
 for x in companies:
 	prices[x] = {}
+	metrics[x] = {}
 	# define endpoint
 	url = f'https://api.tdameritrade.com/v1/marketdata/{x}/pricehistory'
-
 	# define payload
 	payload = {
 		'apikey':api_key,
@@ -64,18 +47,32 @@ for x in companies:
 		'frequency': '1',
 		'period': '1',
 		'needExtendedHoursData': 'true'}
-
-	# Make request
+	# Make request and convert to dict
 	response = requests.get(url, params=payload)
-	# convert to dict
 	data = response.json()
 	#print(data)
 	data = data['candles']
 	for i in data:
 		date = i['datetime']
 		prices[x][date] = (i['close'])
+	# add price and date data to pandas df
+	price_df = pd.DataFrame.from_dict(prices)
+	#print(price_df)
+	# reverse the index to fix problem below
+	price_df = price_df.iloc[::-1]
 
-print(prices)
+	# add moving average columns and calculate them respectively
+	price_df['200_MA'] = price_df[x].rolling(window=200).mean()
+	price_df['150_MA'] = price_df[x].rolling(window=150).mean()
+	price_df['50_MA'] = price_df[x].rolling(window=50).mean()
+	# Calculate the RS, there are aprox 252 trading days in a year
+	#price_df['Relative_Strength'] = (price_df[x][-1]/price_df['^GSPC'][-1]) / (price_df[x][-252]/price_df['^GSPC'][-252]) * 100
+
+	metrics[x]['200_MA'] = price_df['200_MA'][-1]
+	metrics[x]['150_MA'] = price_df['150_MA'][-1]
+	metrics[x]['50_MA'] = price_df['50_MA'][-1]
+
+print(price_df)
 
 
 
