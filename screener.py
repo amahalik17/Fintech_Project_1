@@ -26,7 +26,7 @@ def get_sp500():
 
 companies = get_sp500()
 # using only some to speed up debugging process
-companies = companies[0:20]
+companies = companies[0:300]
 # adding the index to top of list, TD Ameritrade API doesnt have an option for ^GSPC so 
 # i am going to use SPY which is an ETF that tracks/mimicks the S+P500, 
 companies.insert(0, 'SPY')
@@ -109,7 +109,7 @@ for x in companies:
 	except:
 		pass
 
-print(price_df)
+#print(price_df)
 #print(metrics)
 
 # create a metrics df from the metrics dict
@@ -117,15 +117,19 @@ metrics_df = pd.DataFrame.from_dict(metrics)
 # transpose, will change the index to the tickers
 # seperates arrays, read transpose documentation for more info
 metrics_df = metrics_df.T
+
+# Add a name to index column after transposing
+metrics_df.index.name = 'Symbols'
+
 # get companies with 80%+ relative strength
 metrics_df['RS_Rank'] = metrics_df['Rel_Strength'].rank(pct=True)
 # export df to csv file
 metrics_df.to_csv('Data/metrics_data.csv')
-print(metrics_df)
+#print(metrics_df)
 
 ###################
 
-metrics_csv = pd.read_csv('Data/metrics_data.csv')
+metrics_df = pd.read_csv('Data/metrics_data.csv')
 
 #1 The stock price is above 150 and 200 day MA
 metrics_df['Rule1'] = (metrics_df['price'] > metrics_df['200_MA']) & (metrics_df['price'] > metrics_df['150_MA'])
@@ -147,11 +151,9 @@ metrics_df['Rule8'] = metrics_df['RS_Rank'] > 0.8
 all_rules_met = metrics_df[(metrics_df['Rule1'] == True) & (metrics_df['Rule2'] == True) & (metrics_df['Rule3'] == True) & (metrics_df['Rule4'] == True)
 		& (metrics_df['Rule5'] == True) & (metrics_df['Rule6'] == True) & (metrics_df['Rule7'] == True) & (metrics_df['Rule8'] == True)]
 
-print(all_rules_met)
 
 print(metrics_df)
-
-
+print(all_rules_met)
 
 
 
