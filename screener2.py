@@ -35,13 +35,47 @@ more of my own personal scanning strategies.
 
 stock_data = pd.read_csv('Data/metrics_data.csv')
 stock_data = stock_data.head()
-print(stock_data)
-
-export_list = pd.DataFrame(columns=['Symbol', 'RS_Rating', '50_MA', '150_MA', '200_MA', '52_Low', '52_High'])
+#print(stock_data)
 
 for x in stock_data.index:
-    symbol = str(stock_data['Symbols'][x])
-    rel_strength = stock_data['Rel_Strength'][x]
 
-    try:
-        df = pdr.get_data_yahoo(stock, start, now)
+    if ((stock_data['price'][x] > stock_data['200_MA'][x]) and (stock_data['price'][x] > stock_data['150_MA'][x])):
+        rule1 = True
+    else:
+        rule1 = False
+    print(rule1)
+#     if (stock_data['150_MA'] > stock_data['200_MA']):
+#         rule2 = True
+#     else:
+#         rule2 = False
+#     if (stock_data['200_MA'] > stock_data['200_MA_1month_ago']):
+#         rule3 = True
+#     else:
+#         rule3 = False
+#     if ((stock_data['50_MA'] > stock_data['200_MA']) and (stock_data['50_MA'] > stock_data['150_MA'])):
+#         rule4 = True
+#     else:
+#         rule4 = False
+#     if (stock_data['price'] > stock_data['50_MA']):
+#         rule5 = True
+#     else:
+#         rule5 = False
+#     if (stock_data['price'] > stock_data['Above_30%_Low']):
+#         rule6 = True
+#     else:
+#         rule6 = False
+#     if (stock_data['price'] > stock_data['Within_25%_High']):
+#         rule7 = True
+#     else:
+#         rule7 = False
+#     if (stock_data['RS_Rank'] > 0.8):
+#         rule8 = True
+#     else:
+#         rule8 = False
+#     if((rule1 == True) and (rule2 == True) and (rule3 == True) and (rule4 == True) and (rule5 == True) and (rule6 == True) and (rule7 == True) and (rule8 == True)):
+#         all_rules_met = True
+#         print(all_rules_met)
+#     else:
+#         all_rules_met = False
+# print(x)
+
