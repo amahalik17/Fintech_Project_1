@@ -7,12 +7,11 @@ import requests
 import time
 from config import api_key
 
-''' This program is a stock screener that utilizes the TD Ameritrade API
-and scans for stocks with excellent potential according to a specific set
-of rules, and uses Mark Minervini's Trend Template, as well as many 
-more of my own personal scanning strategies.
-
-'''
+# This program is a stock screener that utilizes the TD Ameritrade API
+# and scans for stocks with excellent potential according to a specific set
+# of rules, and uses Mark Minervini's Trend Template, as well as
+# more personal scanning strategies, which have not yet been added, but will be soon
+# after i finish the minervini script.
 
 ###################
 # get a list of all SnP500 companies and put them in a list(by scraping wiki)
