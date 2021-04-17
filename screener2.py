@@ -36,47 +36,108 @@ from config import api_key
 
 stock_data = pd.read_csv('Data/metrics_data.csv')
 stock_data = stock_data.head()
-#print(stock_data)
+print(stock_data)
+
+stock_df = pd.DataFrame(stock_data)
+print(stock_df)
 
 for x in stock_data.index:
 
     if ((stock_data['price'][x] > stock_data['200_MA'][x]) and (stock_data['price'][x] > stock_data['150_MA'][x])):
         rule1 = True
+        if (rule1 == True):
+            stock_df['rule 1'] = rule1
     else:
         rule1 = False
-    print(rule1)
-#     if (stock_data['150_MA'] > stock_data['200_MA']):
-#         rule2 = True
-#     else:
-#         rule2 = False
-#     if (stock_data['200_MA'] > stock_data['200_MA_1month_ago']):
-#         rule3 = True
-#     else:
-#         rule3 = False
-#     if ((stock_data['50_MA'] > stock_data['200_MA']) and (stock_data['50_MA'] > stock_data['150_MA'])):
-#         rule4 = True
-#     else:
-#         rule4 = False
-#     if (stock_data['price'] > stock_data['50_MA']):
-#         rule5 = True
-#     else:
-#         rule5 = False
-#     if (stock_data['price'] > stock_data['Above_30%_Low']):
-#         rule6 = True
-#     else:
-#         rule6 = False
-#     if (stock_data['price'] > stock_data['Within_25%_High']):
-#         rule7 = True
-#     else:
-#         rule7 = False
-#     if (stock_data['RS_Rank'] > 0.8):
-#         rule8 = True
-#     else:
-#         rule8 = False
-#     if((rule1 == True) and (rule2 == True) and (rule3 == True) and (rule4 == True) and (rule5 == True) and (rule6 == True) and (rule7 == True) and (rule8 == True)):
-#         all_rules_met = True
-#         print(all_rules_met)
-#     else:
-#         all_rules_met = False
+        stock_df['rule 1'] = rule1
+    #print(rule1)
+
+    # if (stock_data['150_MA'][x] > stock_data['200_MA'][x]):
+    #     rule2 = True
+    #     if (rule2 == True):
+    #         stock_df['rule 2'] = rule2
+    # else:
+    #     rule2 = False
+    #     stock_df['rule 2'] =rule2
+    # #print(rule2)
+
+    # if (stock_data['200_MA'][x] > stock_data['200_MA_1month_ago'][x]):
+    #     rule3 = True
+    #     if (rule3 == True):
+    #         stock_df['rule 3'] = rule3
+    # else:
+    #     rule3 = False
+    #     stock_df['rule 3'] = rule3
+    # #print(rule3)
+
+    # if ((stock_data['50_MA'][x] > stock_data['200_MA'][x]) and (stock_data['50_MA'][x] > stock_data['150_MA'][x])):
+    #     rule4 = True
+    #     if (rule4 == True):
+    #         stock_df['rule 4'] = rule4
+    # else:
+    #     rule4 = False
+    #     stock_df['rule 4'] = rule4
+    # #print(rule4)
+
+    # if (stock_data['price'][x] > stock_data['50_MA'][x]):
+    #     rule5 = True
+    #     if (rule5 == True):
+    #         stock_df['rule 5'] = rule5
+    # else:
+    #     rule5 = False
+    #     stock_df['rule 5'] = rule5
+    # #print(rule5)
+
+    # if (stock_data['price'][x] > stock_data['Above_30%_Low'][x]):
+    #     rule6 = True
+    #     if (rule6 == True):
+    #         stock_df['rule 6'] = rule6
+    # else:
+    #     rule6 = False
+    #     stock_df['rule 6'] = rule6
+    # #print(rule6)
+
+    # if (stock_data['price'][x] > stock_data['Within_25%_High'][x]):
+    #     rule7 = True
+    #     if (rule7 == True):
+    #         stock_df['rule 7'] = rule7
+    # else:
+    #     rule7 = False
+    #     stock_df['rule 7'] = rule7
+    # #print(rule7)
+
+    # if (stock_data['RS_Rank'][x] > 0.8):
+    #     rule8 = True
+    #     if (rule8 == True):
+    #         stock_df['rule 8'] = rule8
+    # else:
+    #     rule8 = False
+    #     stock_df['rule 8'] = rule8
+    # #print(rule8)
+
+    # if((rule1 == True) and (rule2 == True) and (rule3 == True) and (rule4 == True) and (rule5 == True) and (rule6 == True) and (rule7 == True) and (rule8 == True)):
+    #     all_rules_met = True
+    #     buy_now = 'BUY!'
+    #     print(buy_now)
+    #     print(all_rules_met)
+    # else:
+    #     all_rules_met = False
+    
+    print(stock_df)
+
+
+
+
 # print(x)
+
+
+
+
+
+
+
+
+
+
+
 
