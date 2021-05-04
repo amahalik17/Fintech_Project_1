@@ -7,11 +7,17 @@ import requests
 import time
 from config import api_key
 
+
+
+# Will come back to this method, it will be the same screener, a different
+# way, by iterating through the df and using if statements to pick out winners
+
+
 # This program is a stock screener that utilizes the TD Ameritrade API
 # and scans for stocks with excellent potential according to a specific set
 # of rules, and uses Mark Minervini's Trend Template, as well as
 # more personal scanning strategies, which have not yet been added, but will be soon
-# after i finish the minervini script.
+# after i finish the minervini script. 
 
 
 
@@ -34,32 +40,62 @@ from config import api_key
 
 # print(companies)
 
-stock_data = pd.read_csv('Data/metrics_data.csv')
-stock_data = stock_data.head()
-print(stock_data)
+# metrics_df = pd.read_csv('Data/metrics_data.csv')
+# metrics_df = metrics_df.head(50)
+# print(metrics_df)
 
-stock_df = pd.DataFrame(stock_data)
-print(stock_df)
+#stock_df = pd.DataFrame(stock_data)
+#print(stock_df)
 
-for x in stock_data.index:
+# for x in metrics_df.index:
 
-    if ((stock_data['price'][x] > stock_data['200_MA'][x]) and (stock_data['price'][x] > stock_data['150_MA'][x])):
-        rule1 = True
-        if (rule1 == True):
-            stock_df['rule 1'] = rule1
-    else:
-        rule1 = False
-        stock_df['rule 1'] = rule1
-    #print(rule1)
+
+#     #1 The stock price is above 150 and 200 day MA
+#     metrics_df['Rule1'] = (metrics_df['price'] > metrics_df['200_MA']) & (metrics_df['price'] > metrics_df['150_MA'])
+#     #2 The 150 MA is above the 200 MA
+#     metrics_df['Rule2'] = metrics_df['150_MA'] > metrics_df['200_MA']
+#     #3 The 200 MA line is trending up for at least 1 month 
+#     metrics_df['Rule3'] = metrics_df['200_MA'] > metrics_df['200_MA_1month_ago']
+#     #4 The 50 MA is above the 150 and 200 MA
+#     metrics_df['Rule4'] = (metrics_df['50_MA'] > metrics_df['200_MA']) & (metrics_df['50_MA'] > metrics_df['150_MA'])
+#     #5 The stock price is above the 50 MA
+#     metrics_df['Rule5'] = metrics_df['price'] > metrics_df['50_MA']
+#     #6 The current stock price is at least 30 percent above its 52-week low
+#     metrics_df['Rule6'] = metrics_df['price'] > metrics_df['Above_30%_Low']
+#     #7 The current stock price is within at least 25 percent of its 52-week high.
+#     metrics_df['Rule7'] = metrics_df['price'] > metrics_df['Within_25%_High']
+#     #8 The relative strength ranking is above 80
+#     metrics_df['Rule8'] = metrics_df['RS_Rank'] > 0.8
+
+#     all_rules_met = metrics_df[(metrics_df['Rule1'] == True) & (metrics_df['Rule2'] == True) & (metrics_df['Rule3'] == True) & (metrics_df['Rule4'] == True)
+#             & (metrics_df['Rule5'] == True) & (metrics_df['Rule6'] == True) & (metrics_df['Rule7'] == True) & (metrics_df['Rule8'] == True)]
+
+
+#print(metrics_df)
+#print(all_rules_met)
+
+
+
+
+#for x in stock_data.index:
+
+    # if ((stock_data['price'][x] > stock_data['200_MA'][x]) and (stock_data['price'][x] > stock_data['150_MA'][x])):
+    #     rule1 = True
+    #     if (rule1 == True):
+    #         stock_df['rule 1'] = rule1
+    # else:
+    #     rule1 = False
+    #     stock_df['rule 1'] = rule1
+    # print(rule1)
 
     # if (stock_data['150_MA'][x] > stock_data['200_MA'][x]):
     #     rule2 = True
-    #     if (rule2 == True):
-    #         stock_df['rule 2'] = rule2
+    #     stock_data['rule_2'] = 'good'
     # else:
     #     rule2 = False
-    #     stock_df['rule 2'] =rule2
-    # #print(rule2)
+    #     stock_data['rule_2'] = 'bad'
+    #print(rule2)
+#print(stock_data)
 
     # if (stock_data['200_MA'][x] > stock_data['200_MA_1month_ago'][x]):
     #     rule3 = True
@@ -123,21 +159,14 @@ for x in stock_data.index:
     # else:
     #     all_rules_met = False
     
-    print(stock_df)
-
-
-
+#print(stock_df)
 
 # print(x)
 
 
-
-
-
-
-
-
-
+# i must give credit where credit is due, some of this program was inspired 
+# and instructed by 'richard moglen', as well as 'coding fun' channel on youtube,
+# it is not all me and my ideas, and the conditions come from mark minervini trend template
 
 
 

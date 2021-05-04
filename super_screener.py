@@ -9,9 +9,7 @@ from config import api_key
 
 # This program is a stock screener that utilizes the TD Ameritrade API
 # and scans for stocks with excellent potential according to a specific set
-# of rules, and uses Mark Minervini's Trend Template, as well as
-# more personal scanning strategies, which have not yet been added, but will be soon
-# after i finish the minervini script.
+# of rules
 
 ###################
 # get a list of all SnP500 companies and put them in a list(by scraping wiki)
@@ -25,7 +23,7 @@ def get_sp500():
 
 companies = get_sp500()
 # using only some to speed up debugging process
-companies = companies[0:300]
+companies = companies[0:400]
 # adding the index to top of list, TD Ameritrade API doesnt have an option for ^GSPC so 
 # i am going to use SPY which is an ETF that tracks/mimicks the S+P500, 
 companies.insert(0, 'SPY')
@@ -70,7 +68,6 @@ for x in companies:
 
 		# add price and date data to pandas df
 		price_df = pd.DataFrame.from_dict(prices)
-		#print(price_df)
 
 		# add moving average columns and calculate them respectively
 		price_df['200_MA'] = price_df[x].rolling(window=200).mean()
@@ -82,6 +79,8 @@ for x in companies:
 		# in this case, the s+p500 etf we are using to respresent 'the market'
 		price_df['Relative_Strength'] = (price_df[x].iloc[-1]/price_df['SPY'].iloc[-1]) / (price_df[x].iloc[-252]/price_df['SPY'].iloc[-252]) * 100
 
+		# i want the date in new df
+		#metrics[x]['date'] = price_df[date].iloc[-1]
 		# get last price
 		metrics[x]['price'] = price_df[x].iloc[-1]
 		# get the last MA for metrics dict
@@ -92,8 +91,8 @@ for x in companies:
 		metrics[x]['200_MA_1month_ago'] = price_df['200_MA'].iloc[-30]
 		metrics[x]['150_MA_1month_ago'] = price_df['150_MA'].iloc[-30]
 		# get the ma from 60 days ago
-		metrics[x]['200_MA_1month_ago'] = price_df['200_MA'].iloc[-60]
-		metrics[x]['150_MA_1month_ago'] = price_df['150_MA'].iloc[-60]
+		metrics[x]['200_MA_2month_ago'] = price_df['200_MA'].iloc[-60]
+		metrics[x]['150_MA_2month_ago'] = price_df['150_MA'].iloc[-60]
 		# get 52w low/high, this way works only if timefram is 1 yr, use other way if mult years
 		metrics[x]['52_Week_Low'] = price_df[x].min()
 		metrics[x]['52_Week_High'] = price_df[x].max()
@@ -108,6 +107,7 @@ for x in companies:
 	except:
 		pass
 
+
 #print(price_df)
 #print(metrics)
 
@@ -118,13 +118,13 @@ metrics_df = pd.DataFrame.from_dict(metrics)
 metrics_df = metrics_df.T
 
 # Add a name to index column after transposing
-metrics_df.index.name = 'Symbols'
+metrics_df.index.name = 'symbols'
 
 # get companies with 80%+ relative strength
 metrics_df['RS_Rank'] = metrics_df['Rel_Strength'].rank(pct=True)
+
 # export df to csv file
 metrics_df.to_csv('Data/metrics_data.csv')
-#print(metrics_df)
 
 ###################
 
@@ -150,10 +150,24 @@ metrics_df['Rule8'] = metrics_df['RS_Rank'] > 0.8
 all_rules_met = metrics_df[(metrics_df['Rule1'] == True) & (metrics_df['Rule2'] == True) & (metrics_df['Rule3'] == True) & (metrics_df['Rule4'] == True)
 		& (metrics_df['Rule5'] == True) & (metrics_df['Rule6'] == True) & (metrics_df['Rule7'] == True) & (metrics_df['Rule8'] == True)]
 
+great_buy_df = pd.DataFrame.from_dict(all_rules_met)
+
+great_buy_df.to_csv('Data/stock_winners.csv')
 
 print(metrics_df)
-print(all_rules_met)
+print(great_buy_df)
 
 
 
 
+
+
+
+
+
+
+
+
+# i must give credit where credit is due, some of this program was inspired 
+# and instructed by 'richard moglen', as well as 'coding fun' channel on youtube,
+# it is not all me and my ideas, and the conditions come from mark minervini trend template
