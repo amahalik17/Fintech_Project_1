@@ -7,7 +7,7 @@ from pandas_datareader import data as pdr
 
 # This is a strategy that displays 6 short term EMAs in red 
 # and 6 longer term EMAs in blue, and it's a quick way of finding a
-# short term trend in equities, 
+# short term trends in equities, 
 # entry point = when red first crosses blue
 # and sell point = when blue crosses red
 
@@ -18,21 +18,12 @@ yf.pdr_override()
 stock = input("Enter a stock ticker symbol: ")
 #print(stock)
 
-# Define date data for our start date parameter
-startyear = 2020
-startmonth = 10
-startday = 1
-
-# Define datetime object so python can process as a date
-start = dt.datetime(startyear, startmonth, startday)
-# Set end date, im choosing current date
 now = dt.datetime.now()
-# Store all data in a df
-df = pdr.get_data_yahoo(stock, start, now)
-#print(df)
+start_date = now - dt.timedelta(days = 365)
+df = pdr.get_data_yahoo(stock, start_date, now)
 
 # Exponential moving averages list
-all_emas = [5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200]
+all_emas = [3, 5, 8, 10, 12, 15, 30, 40, 50, 75, 100, 150]
 
 # Iterate through ema list
 for x in all_emas:
@@ -45,31 +36,31 @@ print(df.tail())
 # Define variables that will determine if a position should be entered
 # The num variable will keep track of the row we are on
 # The percentchange list is where we will store our trades
-pos = 0
-num = 0
+position = 0
+number = 0
 percent_change = []
 # Iterate through each date and check for rwb pattern, df.index is date
 for i in df.index:
     # These are the values we need to determine if we are in a rwb pattern
-    ema_min = min(df["Ema_5"][i], df["Ema_10"][i], df["Ema_15"][i], df["Ema_20"][i], df["Ema_25"][i], df["Ema_30"][i])
-    ema_max = max(df["Ema_40"][i], df["Ema_50"][i], df["Ema_75"][i], df["Ema_100"][i], df["Ema_150"][i], df["Ema_200"][i])
+    ema_min = min(df["Ema_3"][i], df["Ema_5"][i], df["Ema_8"][i], df["Ema_10"][i], df["Ema_12"][i], df["Ema_15"][i])
+    ema_max = max(df["Ema_30"][i], df["Ema_40"][i], df["Ema_50"][i], df["Ema_75"][i], df["Ema_100"][i], df["Ema_150"][i])
     close = df["Adj Close"][i]
 
     # If we are in a rwb pattern
     if (ema_min > ema_max):
         print("Red White Blue")
         # Buy at closing price
-        if (pos == 0):
+        if (position == 0):
             buy_price = close
             # Turn our position on(buy)
-            pos = 1
+            position = 1
             print("Buying now at " + str(buy_price))
 
     elif (ema_min < ema_max):
         print("Blue White Red")
         # If we are in a position and we want to sell because pattern changed to bwr
-        if (pos == 1):
-            pos = 0
+        if (position == 1):
+            position = 0
             sell_price = close
             print("Selling now at " + str(sell_price))
             # Calculates profit
@@ -77,14 +68,14 @@ for i in df.index:
             # Adds percent change value to our list for analysis
             percent_change.append(pc)
 
-    if (num == df["Adj Close"].count() - 1 and pos == 1):
-        pos = 0
+    if (number == df["Adj Close"].count() - 1 and position == 1):
+        position = 0
         sell_price = close
         print("Selling now at " + str(sell_price))
         pc = (sell_price/buy_price - 1) * 100
         percent_change.append(pc)
     
-    num += 1
+    number += 1
 
 print(percent_change)
 
@@ -153,6 +144,21 @@ print(f"Total return % over {str(gain_count + loss_count)} trades: {str(total_re
 #print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%" )
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+# i must give credit where credit is due, some of this program was inspired 
+# and instructed by 'richard moglen' on youtube
 
 
 

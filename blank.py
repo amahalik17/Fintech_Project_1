@@ -164,9 +164,4 @@ from config import api_key
 # print(x)
 
 
-# i must give credit where credit is due, some of this program was inspired 
-# and instructed by 'richard moglen', as well as 'coding fun' channel on youtube,
-# it is not all me and my ideas, and the conditions come from mark minervini trend template
-
-
 

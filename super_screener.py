@@ -9,7 +9,7 @@ from config import api_key
 
 # This program is a stock screener that utilizes the TD Ameritrade API
 # and scans for stocks with excellent potential according to a specific set
-# of rules
+# of rules according to the mark minervini trend template
 
 ###################
 # get a list of all SnP500 companies and put them in a list(by scraping wiki)
@@ -157,17 +157,3 @@ great_buy_df.to_csv('Data/stock_winners.csv')
 print(metrics_df)
 print(great_buy_df)
 
-
-
-
-
-
-
-
-
-
-
-
-# i must give credit where credit is due, some of this program was inspired 
-# and instructed by 'richard moglen', as well as 'coding fun' channel on youtube,
-# it is not all me and my ideas, and the conditions come from mark minervini trend template
