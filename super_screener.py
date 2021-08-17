@@ -23,12 +23,12 @@ def get_sp500():
 
 companies = get_sp500()
 # using only some to speed up debugging process
-companies = companies[0:400]
+companies = companies[0:500]
 # adding the index to top of list, TD Ameritrade API doesnt have an option for ^GSPC so 
 # i am going to use SPY which is an ETF that tracks/mimicks the S+P500, 
 companies.insert(0, 'SPY')
 
-print(companies)
+#print(companies)
 
 # create dict to prevent overwrting in nested loop
 prices = {}
