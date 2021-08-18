@@ -1,8 +1,8 @@
 # Import flask and dependencies
 import pandas as pd
 from flask import Flask, render_template, redirect, url_for, request, session, flash
-#from datetime import timedelta
-#from flask_sqlalchemy import SQLAlchemy
+from datetime import timedelta
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
@@ -25,14 +25,19 @@ app = Flask(__name__)
 
 
 
-@app.route("/index.html")
+@app.route("/")
 def home():
+    return render_template('index.html')
+
+@app.route("/index.html")
+def home_page():
     return render_template('index.html')
 
 
 @app.route("/dataframe.html")
 def dataframe():
     #df = pd.read_csv('Data/stock_winners.csv')
+    #print(df)
     return render_template('dataframe.html')
 
 

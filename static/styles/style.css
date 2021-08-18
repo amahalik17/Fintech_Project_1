@@ -1,0 +1,21 @@
+/* body {
+    border: 1px;
+    background-image: url("https://cf-images.us-east-1.prod.boltdns.net/v1/static/854081161001/be3c5224-4fbe-4608-a87d-c5d176dde5e5/e2b75588-05fe-49c5-9c45-7db930b1f87d/1280x720/match/image.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+} */
+
+
+
+/* img.pics {
+    opacity: 0.5;
+
+} */
+
+#bg {
+    border: 1px solid black;
+    /* background-image: url("https://cf-images.us-east-1.prod.boltdns.net/v1/static/854081161001/be3c5224-4fbe-4608-a87d-c5d176dde5e5/e2b75588-05fe-49c5-9c45-7db930b1f87d/1280x720/match/image.jpg"); */
+    background-size: 100% 100%;
+    opacity: 0.4;
+}
