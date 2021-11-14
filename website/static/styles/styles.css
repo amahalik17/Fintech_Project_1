@@ -1,0 +1,29 @@
+
+.bg-image {
+    background-position: center;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    opacity: 80%;
+
+}
+
+.info-body {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    text-align: center;
+    color: white;
+
+}
+
+
+/* .nav-item {
+    display: flex;
+    justify-content: space-around;
+} */
+
+/* .navbar {
+    display: flex;
+    justify-content: space-evenly;
+} */

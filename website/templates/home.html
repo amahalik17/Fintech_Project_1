@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Financial Technology{% endblock %}
+{% block title %}Fintech Home{% endblock %}
 
 {% block content %}
-<h1>This future is now</h1>
+
+    <img class="bg-image" src="{{ url_for('static', filename='images/market1.jpg') }}" alt="market charts"/>
+
+{% endblock %}
+
 <!-- work on fixing this section for deleting notes on the site tmrw -->
-<h3 align='center'>Comments</h3>
+
+<!-- <h3 align='center'>Comments</h3>
 <ul class='list-group list-group-flush' id='comments'>
     {% for note in users.notes %}
     <li class='list-group-item'>{{note.data}}
@@ -22,5 +27,4 @@
     <div align='center'>
         <button type='submit' class='btn btn-primary'>Add comments</button>
     </div>
-</form>
-{% endblock %}
+</form> -->

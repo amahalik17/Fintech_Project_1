@@ -12,8 +12,6 @@ auth = Blueprint('auth', __name__)
 
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
-    # data = request.form
-    # print(data)
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -73,5 +71,42 @@ def sign_up():
 
 
     return render_template('signup.html', users=current_user)
+
+
+@auth.route("/about", methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')
+
+
+
+@auth.route("/blog", methods=['GET', 'POST'])
+def blog():
+    return render_template('blog.html')
+
+
+
+@auth.route("/products", methods=['GET', 'POST'])
+def products():
+    return render_template('products.html')
+
+
+
+@auth.route("/stocks", methods=['GET', 'POST'])
+def stocks():
+    return render_template('stocks.html')
+
+
+
+@auth.route("/options", methods=['GET', 'POST'])
+def options():
+    return render_template('options.html')
+
+
+
+@auth.route("/bonds", methods=['GET', 'POST'])
+def bonds():
+    return render_template('bonds.html')
+
+
 
 
