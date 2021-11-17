@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 #from pandas_datareader import data as pdr
-import requests
+from flask import request
 import time
 from config import api_key
 
@@ -55,7 +55,7 @@ for x in companies:
 			'period': '1',
 			'needExtendedHoursData': 'true'}
 		# Make request and convert to dict
-		response = requests.get(url, params=payload)
+		response = request.get(url, params=payload)
 		data = response.json()
 		#print(data)
 		data = data['candles']

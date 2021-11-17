@@ -1,20 +1,55 @@
 
-.bg-image {
-    background-position: center;
-    background-size: cover;
-    height: 100%;
-    width: 100%;
-    opacity: 80%;
-
-}
-
 .info-body {
-    position: absolute;
-    top: 40%;
-    left: 40%;
+    position: relative;
+    top: 50%;
+    left: auto;
     text-align: center;
     color: white;
 
+}
+
+.signup-form {
+    background-color: lightblue;
+    position: relative;
+    width: 50%;
+    left: 25%;
+    font-weight: bold;
+}
+
+.login-form {
+    background-color: lightblue;
+    position: relative;
+    width: 50%;
+    left: 25%;
+    font-weight: bold;
+}
+
+
+.nav-item {
+    list-style: none;
+    color: dodgerblue;
+}
+
+.navbar {
+    background-color: #313131;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.card {
+    background-color: darkgrey;
+    position: relative;
+    text-align: center;
+    height: 220px;
+    font-size: 18px;
+    font-weight: bold;
+    border-color: grey;
+    border-width: 3px;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 20px;
 }
 
 

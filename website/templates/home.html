@@ -4,9 +4,53 @@
 
 {% block content %}
 
-    <img class="bg-image" src="{{ url_for('static', filename='images/market1.jpg') }}" alt="market charts"/>
+<section class='first' style="background-image: url('../static/images/market1.jpg'); 
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    opacity: 85%;
+    height: 600px;
+    width: 100%;">
 
+    <div class="info-body">
+        <h5 class="info-title">Stock and Options Trading</h5>
+        <p class="info-text">Learn how to trade like the pros!</p>
+        <a href="/signup" class="btn btn-primary">Get Started!</a>
+    </div>
+
+</section>
 {% endblock %}
+
+{% block one %}
+<br/>
+<br/>
+<br/>
+<div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Statistical Modeling</h5>
+          <p class="card-text">We use mathematical models to apply statistical analysis to real world market data.</p>
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Predictive Analytics</h5>
+          <p class="card-text">We develop our very own machine learning algorithms to analyze current and historical market data to identify the likelihood of future outcomes.</p>
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+</div>
+<br/>
+<br/>
+<br/>
+{% endblock %}
+
 
 <!-- work on fixing this section for deleting notes on the site tmrw -->
 

@@ -25,15 +25,19 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"/>
 
-    <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='styles/styles.css') }}"/>
+    <link 
+      rel='stylesheet' 
+      type='text/css' 
+      href="{{ url_for('static', filename='styles/styles.css') }}"/>
+
 
     <title>{% block title %}Financial Technology{% endblock %}</title>
 
   </head>
 
   <body>
-    
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">Rippr Tech</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +83,7 @@
           </div>
         </div>
       </nav>
+    
 
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
@@ -102,23 +107,13 @@
     {% endif %}
     {% endwith %}
 
-    <div class="container-fluid">
-      {% block content %}
-      <img class= "bg-image" src="{{ url_for('static', filename='images/market1.jpg') }}" alt='market charts'/>
-      {% endblock %}
+    {% block content %}
+    {% endblock %}
 
-      {% block one %}
-        <div class="info-body">
-          <h5 class="info-title">Stock and Options Trading</h5>
-          <p class="info-text">Learn how to trade with the best</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-      {% endblock %}
+    {% block one %}
+    {% endblock %}
+    
 
-    </div>
-
-      <div class="container">{% block two %} {% endblock %}</div>
 
       <script
         src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
