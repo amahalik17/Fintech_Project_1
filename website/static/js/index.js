@@ -1,8 +1,10 @@
-// function deleteNote(noteId) {
-//     fetch('delete-note', {
-//         method: 'POST',
-//         body: JSON.stringify({ noteId: noteId }),
-//     }).then((_res) => {
-//         window.location.href = "/"
-//     });
-// }
+// to delete comments
+
+function deleteComment(commentId) {
+    fetch('/delete-comment', {
+        method: 'POST',
+        body: JSON.stringify({ commentId: commentId }),
+    }).then((_res) => {
+        window.location.href = "/"
+    });
+}

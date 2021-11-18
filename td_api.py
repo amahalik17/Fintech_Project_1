@@ -66,10 +66,6 @@ print(df_results)
 
 
 
-
-
-
-
 # # define endpoint
 # url_1 = r'https://api.tdameritrade.com/v1/marketdata/{}/pricehistory'.format('GOOG')
 

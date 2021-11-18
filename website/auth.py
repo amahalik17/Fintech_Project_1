@@ -1,12 +1,19 @@
 # import dependencies
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Users
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
+from .models import Users, Comments
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+import json
 
 
 auth = Blueprint('auth', __name__)
+
+@auth.route('/', methods=['GET', 'POST'])
+@auth.route('/home')
+def home():
+
+    return render_template("home.html", users=current_user)
 
 
 
@@ -22,7 +29,7 @@ def login():
             if check_password_hash(users.password, password):
                 flash('Logged in successfully', category='success')
                 login_user(users, remember=True)
-                return redirect(url_for('views.home'))
+                return redirect(url_for('auth.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
@@ -30,11 +37,13 @@ def login():
 
     return render_template('login.html', users=current_user)
 
+
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
 
 @auth.route("/signup", methods=['GET', 'POST'])
 def sign_up():
@@ -65,47 +74,81 @@ def sign_up():
             new_user = Users(email=email, first_name=first_name, last_name=last_name, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
-            login_user(users, remember=True)
+            # login_user(users, remember=True)
             flash('Account created!', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('auth.home'))
 
 
     return render_template('signup.html', users=current_user)
 
 
-@auth.route("/about", methods=['GET', 'POST'])
-def about():
-    return render_template('about.html')
-
 
 
 @auth.route("/blog", methods=['GET', 'POST'])
+@login_required
 def blog():
-    return render_template('blog.html')
+    
+    if request.method == 'POST':
+        comment = request.form.get('comment')
+        
+        if len(comment) < 1:
+            flash('comment too small', category='error')
+        else:
+            new_comment = Comments(content=comment, user_id=current_user.id)
+            db.session.add(new_comment)
+            db.session.commit()
 
+            flash('comment added.', category='success')
+    
+    return render_template('blog.html', users=current_user)
+
+
+
+@auth.route('/delete-comment', methods=['POST'])
+#@login_required
+def delete_comment():
+    comment = json.loads(request.data)
+    commentId = comment['commentId']
+    comment = Comments.query.get(commentId)
+    if comment:
+        # to make sure user can only delete their own comment
+        if comment.user_id == current_user.id:
+            db.session.delete(comment)
+            db.session.commit()
+
+    return jsonify({})
+
+
+
+
+
+@auth.route("/about", methods=['GET', 'POST'])
+def about():
+    return render_template('about.html', users=current_user)
 
 
 @auth.route("/products", methods=['GET', 'POST'])
 def products():
-    return render_template('products.html')
+    return render_template('products.html', users=current_user)
 
 
 
 @auth.route("/stocks", methods=['GET', 'POST'])
 def stocks():
-    return render_template('stocks.html')
+    return render_template('stocks.html', users=current_user)
 
 
 
 @auth.route("/options", methods=['GET', 'POST'])
 def options():
-    return render_template('options.html')
+    return render_template('options.html', users=current_user)
 
 
 
 @auth.route("/bonds", methods=['GET', 'POST'])
 def bonds():
-    return render_template('bonds.html')
+    return render_template('bonds.html', users=current_user)
+
 
 
 

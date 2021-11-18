@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+
+{% block one %}
+
+<h3 align='center'>Comments</h3>
+<ul class='list-group list-group-flush' id='comments'>
+    {% for comment in users.comments %}
+    <li class='list-group-item'>{{comment.content}}
+        <button type='button' class='close', onclick="deleteComment({{ comment.id }})">
+            <span aria-hidden='true'>&times;</span>
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+
+<form method='POST'>
+    <textarea name='comment', id='comment', class='form-control'></textarea>
+    <br/>
+    <div align='center'>
+        <button type='submit' class='btn btn-primary'>Add comments</button>
+    </div>
+</form>
+
+{% endblock %}

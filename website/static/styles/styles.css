@@ -40,7 +40,7 @@
     background-color: darkgrey;
     position: relative;
     text-align: center;
-    height: 220px;
+    height: 250px;
     font-size: 18px;
     font-weight: bold;
     border-color: grey;
@@ -50,6 +50,10 @@
 .card-title {
     font-weight: bold;
     font-size: 20px;
+}
+
+.card-btn {
+    position: relative;
 }
 
 
