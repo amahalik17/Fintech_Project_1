@@ -1,12 +1,14 @@
 # import dependencies
+import os
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from .models import Users, Comments
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import json
-
-
+import yfinance as yf
+from pattern_dict import patterns
+import pandas as pd
 auth = Blueprint('auth', __name__)
 
 @auth.route('/', methods=['GET', 'POST'])
@@ -120,6 +122,18 @@ def delete_comment():
 
 
 
+@auth.route("/patterns", methods=['GET', 'POST'])
+#@login_required
+def pattern_scanner():
+    with open('Data/sp500.csv') as f:
+        companies = f.read().splitlines()
+        for company in companies:
+            symbol = company.split(',')[0]
+            #print(symbol)
+            #df = yf.download(symbol, start='2021-01-14', end='2022-01-14')
+            #df.to_csv('./Data/{}.csv'.format(symbol))
+    return render_template('patterns.html', users=current_user, patterns=patterns)
+
 
 
 @auth.route("/about", methods=['GET', 'POST'])
@@ -130,7 +144,6 @@ def about():
 @auth.route("/products", methods=['GET', 'POST'])
 def products():
     return render_template('products.html', users=current_user)
-
 
 
 @auth.route("/stocks", methods=['GET', 'POST'])

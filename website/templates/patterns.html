@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Pattern Scanner{% endblock %}
+
+{% block content %}
+
+<br/>
+<br/>
+<h1>Candlestick Pattern Recognition</h1>
+<form>
+  <select name="pattern">
+    {% for pattern in patterns %}
+    <option value="{{ pattern }}">{{ patterns[pattern] }}</option>
+    {% endfor %}
+  </select>
+  <input type="submit" value="Scan Now!"/>
+</form>
+
+{% endblock %}
+
+
+
+{% block one %}
+
+{% endblock %}
+
+
+
+{% block two %}
+{% endblock %}
+
+
+
