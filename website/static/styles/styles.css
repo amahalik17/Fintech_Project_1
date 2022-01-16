@@ -56,6 +56,24 @@
     position: relative;
 }
 
+.Bullish {
+    background-color: green;
+    color: white
+}
+
+.Bearish {
+    background-color: red;
+    color: white
+}
+
+td {
+    padding: 10px;
+    border-color: black;
+    border-width: 2px;
+}
+
+
+
 
 /* .nav-item {
     display: flex;

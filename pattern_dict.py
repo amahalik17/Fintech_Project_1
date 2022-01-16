@@ -1,4 +1,9 @@
 import pandas as pd
+from flask import Flask, request
+import yfinance as yf
+import os
+import talib
+
 
 
 # get a list of all SnP500 companies and put them in a list(by scraping wiki)
@@ -11,15 +16,27 @@ def get_sp500():
 
 companies = get_sp500()
 # using only some to speed up debugging process
-#companies = companies[0:500]
+#companies = companies[0:50]
 # adding the index to top of list, using SPY
 #companies.insert(0, 'SPY')
 
-print(companies)
+#print(companies)
 print(len(companies))
 
 df = pd.DataFrame(companies)
-#df.to_csv('Data/sp500.csv', index=False)
+df.to_csv('otherdata/sp500.csv', index=False)
+
+
+def grab_data():
+    with open('otherdata/sp500.csv') as f:
+        companies = f.read().splitlines()
+        for company in companies:
+            symbol = company.split(',')[0]
+            #print(symbol)
+            #df = yf.download(symbol, start='2021-01-14', end='2022-01-14')
+            #df.to_csv('Data/{}.csv'.format(symbol))
+
+
 
 patterns = {
     'CDL2CROWS':'Two Crows',
