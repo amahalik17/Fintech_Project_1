@@ -5,7 +5,6 @@ import os
 import talib
 
 
-
 # get a list of all SnP500 companies and put them in a list(by scraping wiki)
 def get_sp500():
 	sp500_tickers = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
@@ -17,8 +16,6 @@ def get_sp500():
 companies = get_sp500()
 # using only some to speed up debugging process
 #companies = companies[0:50]
-# adding the index to top of list, using SPY
-#companies.insert(0, 'SPY')
 
 #print(companies)
 print(len(companies))

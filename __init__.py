@@ -18,7 +18,6 @@ def create_app():
 
     from .auth import auth
 
-    #app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
     from .models import Users, Comments
@@ -37,7 +36,7 @@ def create_app():
 
 
 def create_database(app):
-    if not path.exists('website/' + db_name):
+    if not path.exists('Fintech_Project_1' + db_name):
         db.create_all(app=app)
         print('Created database!')
 

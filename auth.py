@@ -11,7 +11,10 @@ from pattern_dict import patterns, grab_data
 import pandas as pd
 import talib
 
+
 auth = Blueprint('auth', __name__)
+
+
 
 @auth.route('/', methods=['GET', 'POST'])
 @auth.route('/home')
@@ -128,26 +131,22 @@ def delete_comment():
 #@login_required
 def pattern_scanner():
     grab_data()
-
     pattern = request.args.get('pattern', None)
     stocks = {}
 
-    with open('./olderdata/sp500names.csv') as f:
+    with open('otherdata/sp500names.csv') as f:
         for row in csv.reader(f):
             stocks[row[0]] = {'Company': row[1]}
-
     print(stocks)
 
     if pattern:
-        print(pattern)
-        datafiles = os.listdir('./Data')
+        #print(pattern)
+        datafiles = os.listdir('Data')
         for filename in datafiles:
-            df = pd.read_csv('./Data/{}'.format(filename))
+            df = pd.read_csv('Data/{}'.format(filename))
             #print(df)
             pattern_func = getattr(talib, pattern)
-
             symbol = filename.split('.')[0]
-
             try:
                 result = pattern_func(df['Open'], df['High'], df['Low'], df['Close'])
                 last = result.tail(1).values[0]
@@ -157,11 +156,8 @@ def pattern_scanner():
                     stocks[symbol][pattern] = "Bearish"
                 else:
                     stocks[symbol][pattern] = None
-
             except:
                 pass
-
-
     return render_template('patterns.html', users=current_user, patterns=patterns, stocks=stocks, current_pattern=pattern)
 
 
