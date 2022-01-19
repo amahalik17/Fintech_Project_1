@@ -1,6 +1,8 @@
 import sqlite3
+from config import db_path
 
-connection = sqlite3.connect('fintech_app.db')
+
+connection = sqlite3.connect(db_path)
 
 cursor = connection.cursor()
 
@@ -8,7 +10,7 @@ cursor.execute("""
     CREATE TABLE IF NOT EXISTS stock (
         id INTEGER PRIMARY KEY, 
         symbol TEXT NOT NULL UNIQUE, 
-        company TEXT NOT NULL
+        name TEXT NOT NULL
     )
 """)
 
@@ -21,7 +23,6 @@ cursor.execute("""
         high NOT NULL, 
         low NOT NULL, 
         close NOT NULL, 
-        adjusted_close NOT NULL, 
         volume NOT NULL,
         FOREIGN KEY (stock_id) REFERENCES stock (id)
     )

@@ -1,37 +1,37 @@
-import pandas as pd
-from flask import Flask, request
-import yfinance as yf
-import os
-import talib
+# import pandas as pd
+# from flask import Flask, request
+#import yfinance as yf
+#import os
+#import talib
 
 
 # get a list of all SnP500 companies and put them in a list(by scraping wiki)
-def get_sp500():
-	sp500_tickers = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
-	sp500_tickers = sp500_tickers[0]
-	tickers = sp500_tickers['Symbol'].values.tolist()
-	return tickers
+# def get_sp500():
+# 	sp500_tickers = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
+# 	sp500_tickers = sp500_tickers[0]
+# 	tickers = sp500_tickers['Symbol'].values.tolist()
+# 	return tickers
 
 
-companies = get_sp500()
-# using only some to speed up debugging process
+#companies = get_sp500()
+
+## using only some to speed up debugging process
 #companies = companies[0:50]
+##print(companies)
+##print(len(companies))
 
-#print(companies)
-print(len(companies))
-
-df = pd.DataFrame(companies)
-df.to_csv('otherdata/sp500.csv', index=False)
+#df = pd.DataFrame(companies)
+#df.to_csv('otherdata/sp500.csv', index=False)
 
 
-def grab_data():
-    with open('otherdata/sp500.csv') as f:
-        companies = f.read().splitlines()
-        for company in companies:
-            symbol = company.split(',')[0]
-            #print(symbol)
-            #df = yf.download(symbol, start='2021-01-14', end='2022-01-14')
-            #df.to_csv('Data/{}.csv'.format(symbol))
+# def grab_data():
+#     with open('otherdata/sp500.csv') as f:
+#         companies = f.read().splitlines()
+#         for company in companies:
+#             symbol = company.split(',')[0]
+#             print(symbol)
+#             df = yf.download(symbol, start='2021-01-14', end='2022-01-14')
+#             df.to_csv('Data/{}.csv'.format(symbol))
 
 
 
