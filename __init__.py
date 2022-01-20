@@ -16,11 +16,11 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://root:{db_pw}@localhost/{db_name}'
     db.init_app(app)
 
-    from .auth import auth
+    from auth import auth
 
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import Users, Comments
+    from models import Users, Comments
 
     create_database(app)
 
@@ -37,6 +37,6 @@ def create_app():
 
 def create_database(app):
     if not path.exists('Fintech_Project_1' + db_name):
-        db.create_all(app=app)
+        #db.create_all(app=app)
         print('Created database!')
 

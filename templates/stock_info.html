@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Stock Data{% endblock %}
+
+{% block content %}
+
+<h1>Stock Data</h1>
+
+<form method="GET">
+<select name="filter">
+  <option value="">Showing All Stocks</option>
+  <option value="new_intra_high">New Intraday Highs</option>
+  <option value="new_closing_high">New Closing Highs</option>
+  <option value="new_intra_low">New Intraday Lows</option>
+  <option value="new_closing_low">New Closing Lows</option>
+</select>
+<input type="submit"/>
+</form>
+
+
+<table class="table table-striped table-dark">
+    <thead>
+      <tr>
+        <th scope="col">Symbol</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks %}
+      <tr>
+        <td>{{ stock.symbol }}</td>
+        <td><a href="/charts/{{stock.symbol}}">{{ stock.name }}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+
+
+
+{% endblock %}

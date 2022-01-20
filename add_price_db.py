@@ -14,8 +14,7 @@ cursor.execute("""
 
 rows = cursor.fetchall()
 
-symbols = [row['symbol'] for row in rows]
-
+symbols = []
 stock_dict = {}
 
 # This makes it easier to reference pk and fk
@@ -24,15 +23,15 @@ for row in rows:
     symbols.append(symbol)
     stock_dict[symbol] = row['id']
 
-
 group_size = 200
 for i in range(0, len(symbols), group_size):
-    symbol_group = symbols[i:i+group_size]
 
+    symbol_group = symbols[i:i+group_size]
     barsets = api.get_barset(symbol_group, 'day')
 
     for symbol in barsets:
         print(f"processing symbol {symbol}")
+        
         for bar in barsets[symbol]:
             stock_id = stock_dict[symbol]
             cursor.execute("""

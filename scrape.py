@@ -21,4 +21,4 @@ for row in rows:
 
 df = pd.DataFrame(list(zip(tickers, names)))
 #print(df)
-df.to_csv('otherdata/sp500names.csv', index=False)
+#df.to_csv('otherdata/sp500names.csv', index=False)
