@@ -193,6 +193,7 @@ def bonds():
 
 
 @auth.route("/stock_info", methods=['GET', 'POST'])
+#@login_required
 def stock_info():
 
     stock_filter = request.args.get('filter', None)
@@ -220,6 +221,7 @@ def stock_info():
 
 
 @auth.route("/charts/<symbol>", methods=['GET', 'POST'])
+#@login_required
 def charts(symbol):
 
     # Establish connection and cursor
@@ -241,6 +243,7 @@ def charts(symbol):
 
 
 @auth.route("/apply_scanner", methods=['GET', 'POST'])
+#@login_required
 def apply_scanner():
 
     if request.method == 'POST':
@@ -262,6 +265,7 @@ def apply_scanner():
 
 
 @auth.route("/strategies/<strategy_id>", methods=['GET', 'POST'])
+#@login_required
 def strategies(strategy_id):
 
     # Establish connection and cursor
