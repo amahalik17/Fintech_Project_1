@@ -13,4 +13,8 @@ cursor.execute("""
     DROP TABLE stock
 """)
 
+cursor.execute("""
+    DROP TABLE users
+""")
+
 connection.commit()

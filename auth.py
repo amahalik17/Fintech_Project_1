@@ -1,22 +1,17 @@
 # import dependencies
 import os, csv
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
-from models import Users, Comments
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-from __init__ import db
 from flask_login import login_user, login_required, logout_user, current_user
-import json
-import yfinance as yf
+#import yfinance as yf
 from pattern_dict import patterns#, grab_data
 import pandas as pd
 import talib
 import sqlite3
-import alpaca_trade_api as tradeapi
-from config import alpaca_api_key, alpaca_secret, base_url, db_path
+from config import db_path
 from datetime import date
 
 auth = Blueprint('auth', __name__)
-
 
 
 @auth.route('/', methods=['GET', 'POST'])
@@ -30,15 +25,21 @@ def home():
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
+        email = request.form['email']
+        password = request.form['password']
+
+        # Establish connection and cursor
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+
+        cursor.execute("""SELECT email, password FROM users WHERE email = ?""", (email,))
+        user = cursor.fetchone()
 
         # check if user email is valid/in db
-        users = Users.query.filter_by(email=email).first()
-        if users:
-            if check_password_hash(users.password, password):
+        if user:
+            if check_password_hash(user.password, password):
                 flash('Logged in successfully', category='success')
-                login_user(users, remember=True)
+                login_user(user, remember=True)
                 return redirect(url_for('auth.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -57,76 +58,53 @@ def logout():
 
 @auth.route("/signup", methods=['GET', 'POST'])
 def sign_up():
+
     if request.method == 'POST':
-        email = request.form.get('email')
-        first_name = request.form.get('firstName')
-        last_name = request.form.get('lastName')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
-
-        # make sure user doesn't already exist
-        users = Users.query.filter_by(email=email).first()
-        if users:
-            flash('Email already exists.', category='error')
-
-        if len(email) < 7:
-            flash('Email must be greater than 6 characters.', category='error')
-        elif len(first_name) < 2:
-            flash('First name must be greater than 1 character.', category='error')
-        elif len(last_name) < 2:
-            flash('Last name must be greater than 1 character.', category='error')
-        elif password1 != password2:
-            flash('Passwords do not match.', category='error')
-        elif len(password1) < 7:
-            flash('Password must be greater than 6 characters.', category='error')
-        else:
-            # add user to db
-            new_user = Users(email=email, first_name=first_name, last_name=last_name, password=generate_password_hash(password1, method='sha256'))
-            db.session.add(new_user)
-            db.session.commit()
-            # login_user(users, remember=True)
-            flash('Account created!', category='success')
-            return redirect(url_for('auth.home'))
-
-
-    return render_template('signup.html', users=current_user)
-
-
-
-
-@auth.route("/blog", methods=['GET', 'POST'])
-@login_required
-def blog():
-    
-    if request.method == 'POST':
-        comment = request.form.get('comment')
+        # make sure no blank fields
+        if (request.form['email'] != "" and ["firstName"] != "" and ["lastName"] != "" and ["password1"] != "" and ["password2"] != ""):
         
-        if len(comment) < 1:
-            flash('comment too small', category='error')
-        else:
-            new_comment = Comments(content=comment, user_id=current_user.id)
-            db.session.add(new_comment)
-            db.session.commit()
-
-            flash('comment added.', category='success')
-    
-    return render_template('blog.html', users=current_user)
+            email = request.form['email']
+            first_name = request.form['firstName']
+            last_name = request.form['lastName']
+            password1 = request.form['password1']
+            password2 = request.form['password2']
 
 
+            # Establish connection and cursor
+            connection = sqlite3.connect(db_path)
+            cursor = connection.cursor()
 
-@auth.route('/delete-comment', methods=['POST'])
-#@login_required
-def delete_comment():
-    comment = json.loads(request.data)
-    commentId = comment['commentId']
-    comment = Comments.query.get(commentId)
-    if comment:
-        # to make sure user can only delete their own comment
-        if comment.user_id == current_user.id:
-            db.session.delete(comment)
-            db.session.commit()
+            cursor.execute("""SELECT * FROM users WHERE email = ?""", (email,))
+            user = cursor.fetchone()
+            print(user)
 
-    return jsonify({})
+            # make sure user doesn't already exist and new users meet reqs
+            if user:
+                flash('Email already exists.', category='error')
+            elif len(email) < 7:
+                flash('Email must be greater than 6 characters.', category='error')
+            elif len(first_name) < 2:
+                flash('First name must be greater than 1 character.', category='error')
+            elif len(last_name) < 2:
+                flash('Last name must be greater than 1 character.', category='error')
+            elif password1 != password2:
+                flash('Passwords do not match.', category='error')
+            elif len(password1) < 7:
+                flash('Password must be greater than 6 characters.', category='error')
+            else:
+                password_hash = generate_password_hash(password1, method='sha256')
+                cursor.execute("""
+                INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)
+                """, (email, password_hash, first_name, last_name))
+                new_user = cursor.fetchone()
+
+                connection.commit()
+
+                login_user(new_user, remember=True)
+                flash('Account created!', category='success')
+                return redirect(url_for('auth.home'))
+
+    return render_template("signup.html", users=current_user)
 
 
 
@@ -242,47 +220,47 @@ def charts(symbol):
 
 
 
-@auth.route("/apply_scanner", methods=['GET', 'POST'])
-#@login_required
-def apply_scanner():
+# @auth.route("/apply_scanner", methods=['GET', 'POST'])
+# #@login_required
+# def apply_scanner():
 
-    if request.method == 'POST':
-        stock_id = request.form['stock_id']
-        strategy_id = request.form['strategy_id']
+#     if request.method == 'POST':
+#         stock_id = request.form['stock_id']
+#         strategy_id = request.form['strategy_id']
 
-        # Establish connection and cursor
-        connection = sqlite3.connect(db_path)
-        cursor = connection.cursor()
+#         # Establish connection and cursor
+#         connection = sqlite3.connect(db_path)
+#         cursor = connection.cursor()
 
-        cursor.execute("""
-            INSERT INTO stock_strategy (stock_id, strategy_id) VALUES (?, ?)
-        """, (stock_id, strategy_id))
+#         cursor.execute("""
+#             INSERT INTO stock_strategy (stock_id, strategy_id) VALUES (?, ?)
+#         """, (stock_id, strategy_id))
 
-        connection.commit()
+#         connection.commit()
 
-    return redirect(url_for('auth.strategies', strategy_id=strategy_id, stock_id=stock_id))
-    #return render_template('strategies.html', users=current_user, strategy_id=strategy_id, stock_id=stock_id)
+#     return redirect(url_for('auth.strategies', strategy_id=strategy_id, stock_id=stock_id))
+#     #return render_template('strategies.html', users=current_user, strategy_id=strategy_id, stock_id=stock_id)
 
 
-@auth.route("/strategies/<strategy_id>", methods=['GET', 'POST'])
-#@login_required
-def strategies(strategy_id):
+# @auth.route("/strategies/<strategy_id>", methods=['GET', 'POST'])
+# #@login_required
+# def strategies(strategy_id):
 
-    # Establish connection and cursor
-    connection = sqlite3.connect(db_path)
-    cursor = connection.cursor()
+#     # Establish connection and cursor
+#     connection = sqlite3.connect(db_path)
+#     cursor = connection.cursor()
 
-    cursor.execute("""
-        SELECT id, name FROM strategy WHERE id = ?
-    """, (strategy_id,))
-    strategy = cursor.fetchone()
+#     cursor.execute("""
+#         SELECT id, name FROM strategy WHERE id = ?
+#     """, (strategy_id,))
+#     strategy = cursor.fetchone()
 
-    cursor.execute("""
-        SELECT symbol, name
-        FROM stock JOIN stock_strategy on stock_strategy.stock_id = stock.id
-        WHERE strategy_id = ?
-    """, (strategy_id,))
+#     cursor.execute("""
+#         SELECT symbol, name
+#         FROM stock JOIN stock_strategy on stock_strategy.stock_id = stock.id
+#         WHERE strategy_id = ?
+#     """, (strategy_id,))
 
-    stocks = cursor.fetchall()
+#     stocks = cursor.fetchall()
 
-    return render_template('strategies.html', stocks=stocks, users=current_user, strategy=strategy)
+#     return render_template('strategies.html', stocks=stocks, users=current_user, strategy=strategy)
