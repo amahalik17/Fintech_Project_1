@@ -13,7 +13,7 @@
 <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container">
   <div id="tradingview_c2c13"></div>
-  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-TSLA/" rel="noopener" target="_blank"><span class="blue-text">TSLA Chart</span></a> by TradingView</div>
+  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/{{stock.exchange}}-{{stock.symbol}}/" rel="noopener" target="_blank"><span class="blue-text">{{stock.symbol}} Chart</span></a> by TradingView</div>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script type="text/javascript">
   new TradingView.widget(
@@ -36,16 +36,6 @@
 </div>
 <!-- TradingView Widget END -->
 
-<form method="POST" action="/apply_scanner">
-  <select name="strategy_id">
-    {% for strategy in strategies %}
-      <option value= "{{ strategy.id }}">{{ strategy.name }}</option>
-    {% endfor %}
-  </select>
-
-  <input type="hidden" name="stock_id" value="{{ stock.id }}"/>
-  <input type="submit" value="Apply Scanner"/>
-</form>
 
 
 <h4>Price Data</h4>
