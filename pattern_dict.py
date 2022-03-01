@@ -1,11 +1,14 @@
+
+from base64 import encode
+from matplotlib import ticker
 import pandas as pd
 from flask import Flask, request
+from pyparsing import col
 import yfinance as yf
 import os
 import talib
 import sqlite3
 from config import db_path
-
 
 # Establish connection and cursor
 connection = sqlite3.connect(db_path)
@@ -13,21 +16,37 @@ connection.row_factory = sqlite3.Row
 cursor = connection.cursor()
 
 # Create a list of all symbols in my stock db
-cursor.execute("""SELECT symbol FROM stock""")
-symbols_list = [i[0] for i in cursor.fetchall()]
+# cursor.execute("""SELECT symbol FROM stock""")
+# symbols_list = [i[0] for i in cursor.fetchall()]
 
 # shorten list to speed up debugging process
-symbols_list = symbols_list[0:100]
+#symbols_list = symbols_list[0:100]
 
-df = pd.DataFrame(symbols_list)
+stocks = {}
 
-def grab_data():
-    for symbols in symbols_list:
-        symbol = symbols.split(',')[0]
-        print(symbol)
-        df = yf.download(symbol, start='2021-06-14', end='2022-01-14')
-        #df.to_csv('Data/{}.csv'.format(symbol))
-        print(df)
+cursor.execute("""SELECT * FROM stock""")
+
+result = cursor.fetchall()
+#print(result)
+#symbols = [row['symbol'] for row in result]
+#print(symbols)
+df = pd.DataFrame(result)
+# for column in df.columns:
+#     df[column] = df[column].str.replace(r'\W',"")
+print(df)
+
+
+# def grab_data():
+#     for symbol in symbols_list:
+#         stocks[symbol] = {"Company": symbol}
+#         #df = yf.download(symbol, start='2021-12-14', end='2022-01-14')
+#         #print(df)
+#     #print(stocks)
+
+#grab_data()
+
+
+
 
 
 patterns = {

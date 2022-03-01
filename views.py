@@ -2,8 +2,8 @@
 import os, csv
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
-#import yfinance as yf
-from pattern_dict import patterns#, grab_data
+import yfinance as yf
+from pattern_dict import patterns
 import pandas as pd
 import talib
 import sqlite3
@@ -22,25 +22,35 @@ def home():
 @views.route("/patterns", methods=['GET', 'POST'])
 #@login_required
 def pattern_scanner():
-    #grab_data()
+
     pattern = request.args.get('pattern', None)
     stocks = {}
 
-    with open('otherdata/sp500names.csv') as f:
-        for row in csv.reader(f):
-            stocks[row[0]] = {'Company': row[1]}
-    print(stocks)
+    # Establish connection and cursor
+    connection = sqlite3.connect(db_path)
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    # Create a list of all symbols in my stock db
+    cursor.execute("""SELECT symbol FROM stock""")
+
+    symbols_list = [i[0] for i in cursor.fetchall()]
+    # shorten list to speed up debugging process
+    symbols_list = symbols_list[0:100]
+
+    df = pd.DataFrame(symbols_list)
+
+    for symbol in symbols_list:
+        stocks[symbol] = {"Company": symbol}
+        #df = yf.download(symbol, start='2022-01-14', end='2022-02-14')
+
 
     if pattern:
-        #print(pattern)
-        datafiles = os.listdir('Data')
-        for filename in datafiles:
-            df = pd.read_csv('Data/{}'.format(filename))
-            #print(df)
+        for symbol in symbols_list:
             pattern_func = getattr(talib, pattern)
-            symbol = filename.split('.')[0]
             try:
                 result = pattern_func(df['Open'], df['High'], df['Low'], df['Close'])
+                print(result)
                 last = result.tail(1).values[0]
                 if last > 0:
                     stocks[symbol][pattern] = "Bullish"

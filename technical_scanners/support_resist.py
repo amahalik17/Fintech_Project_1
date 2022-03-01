@@ -17,6 +17,7 @@ start_date = now - dt.timedelta(days = 365)
 stock = input("Enter a stock ticker symbol: ")
 #print(stock)
 
+# type stop for the input to squit program
 while stock != "stop":
     
     df = pdr.get_data_yahoo(stock, start_date, now)
