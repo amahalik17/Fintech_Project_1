@@ -1,40 +1,45 @@
-
-from base64 import encode
-from matplotlib import ticker
 import pandas as pd
 from flask import Flask, request
-from pyparsing import col
 import yfinance as yf
 import os
 import talib
 import sqlite3
 from config import db_path
 
+# stocks = {}
+
 # Establish connection and cursor
-connection = sqlite3.connect(db_path)
-connection.row_factory = sqlite3.Row
-cursor = connection.cursor()
+# connection = sqlite3.connect(db_path)
+# connection.row_factory = sqlite3.Row
+# cursor = connection.cursor()
 
 # Create a list of all symbols in my stock db
-# cursor.execute("""SELECT symbol FROM stock""")
-# symbols_list = [i[0] for i in cursor.fetchall()]
+# cursor.execute("""SELECT * FROM stock""")
+# stock_data = cursor.fetchall()
 
-# shorten list to speed up debugging process
-#symbols_list = symbols_list[0:100]
+#symbols_list = [i[1] for i in cursor.fetchall()]
+#print(symbols_list)
 
-stocks = {}
+# stock_df = pd.DataFrame(stock_data)
+#print(stock_df)
 
-cursor.execute("""SELECT * FROM stock""")
+# cursor.execute("""SELECT stock_id, date, open, high, low, close FROM stock_price ORDER BY date DESC""")
+# price_data = cursor.fetchall()
 
-result = cursor.fetchall()
-#print(result)
-#symbols = [row['symbol'] for row in result]
-#print(symbols)
-df = pd.DataFrame(result)
-# for column in df.columns:
-#     df[column] = df[column].str.replace(r'\W',"")
-print(df)
+# price_df = pd.DataFrame(price_data)
+# print(price_df.head())
 
+# print(price_df[2])
+# print(price_df[5])
+
+# for row in stock_data:
+#         stocks[row['id']] = {"Company": row['symbol']}
+
+#print(stocks)
+
+
+# REMEMBER***note to self***
+#print(df[2][0])
 
 # def grab_data():
 #     for symbol in symbols_list:
@@ -44,8 +49,6 @@ print(df)
 #     #print(stocks)
 
 #grab_data()
-
-
 
 
 

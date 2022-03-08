@@ -9,20 +9,22 @@
 <form method="GET">
 <select name="filter">
   <option value="">Show All Stocks</option>
-  <option value="new_intra_high">New Intraday Highs</option>
+  <!-- <option value="new_intra_high">New Intraday Highs</option> -->
   <option value="new_closing_high">New Closing Highs</option>
-  <option value="new_intra_low">New Intraday Lows</option>
+  <!-- <option value="new_intra_low">New Intraday Lows</option> -->
   <option value="new_closing_low">New Closing Lows</option>
 </select>
 <input type="submit"/>
 </form>
+<br/>
+<br/>
 
 <form class="search" method="GET">
   <input type="search" id="search" name="search" placeholder="Search Ticker"/>
   <button type="submit" name="search" value="search">Search</button>
 </form>
 
-
+<div class="table-responsive">
 <table class="table table-striped table-dark">
     <thead>
       <tr>
@@ -39,6 +41,7 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
 
 
 

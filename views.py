@@ -32,24 +32,34 @@ def pattern_scanner():
     cursor = connection.cursor()
 
     # Create a list of all symbols in my stock db
-    cursor.execute("""SELECT symbol FROM stock""")
+    cursor.execute("""SELECT * FROM stock""")
+    stock_data = cursor.fetchall()
 
-    symbols_list = [i[0] for i in cursor.fetchall()]
+    # Make a symbols list
+    symbols_list = [i[1] for i in cursor.fetchall()]
+
     # shorten list to speed up debugging process
-    symbols_list = symbols_list[0:100]
+    #symbols_list = symbols_list[0:100]
+    #print(symbols_list)
 
-    df = pd.DataFrame(symbols_list)
+    #df = pd.DataFrame(symbols_list)
 
     for symbol in symbols_list:
-        stocks[symbol] = {"Company": symbol}
+        stocks[symbol][0] = {"Company": symbol}
         #df = yf.download(symbol, start='2022-01-14', end='2022-02-14')
+    print(stocks)
+    
+    cursor.execute("""SELECT stock_id, date, open, high, low, close FROM stock_price ORDER BY date DESC""")
+    price_data = cursor.fetchall()
 
+    #price_df = pd.DataFrame(price_data)
 
     if pattern:
         for symbol in symbols_list:
+            price_df = pd.DataFrame(price_data)
             pattern_func = getattr(talib, pattern)
             try:
-                result = pattern_func(df['Open'], df['High'], df['Low'], df['Close'])
+                result = pattern_func(price_df[2], price_df[3], price_df[4], price_df[5])
                 print(result)
                 last = result.tail(1).values[0]
                 if last > 0:
@@ -102,19 +112,30 @@ def stock_info():
     cursor.execute("""SELECT symbol FROM stock""")
     symbols_list = [i[0] for i in cursor.fetchall()]
 
-    # stock_filter = request.args.get('filter', None)
-    # if stock_filter == 'new_closing_high':
-    #     cursor.execute("""
-    #     select * from (
-    #         select symbol, name, stock_id, max(close), date
-    #         from stock_price join stock on stock.id = stock_price.stock_id
-    #         group by stock_id
-    #         order by symbol
-    #     ) where date = ?
-    #     """, (date.today().isoformat(),))
+    stock_filter = request.args.get('filter', None)
+    
+    if stock_filter == 'new_closing_high':
+        cursor.execute("""
+        select * from (
+            select symbol, name, stock_id, max(close), date
+            from stock_price join stock on stock.id = stock_price.stock_id
+            group by stock_id
+            order by symbol
+        ) where date = ?
+        """, (date.today().isoformat(),))
+    
+    elif stock_filter == 'new_closing_low':
+        cursor.execute("""
+        select * from (
+            select symbol, name, stock_id, min(close), date
+            from stock_price join stock on stock.id = stock_price.stock_id
+            group by stock_id
+            order by symbol
+        ) where date = ?
+        """, (date.today().isoformat(),))
 
     # Loop through list of symbols to display searched symbol
-    if search in symbols_list:
+    elif search in symbols_list:
         cursor.execute("""SELECT id, symbol, name FROM stock WHERE symbol = ?""",(search,))
     else:
         cursor.execute("""SELECT id, symbol, name FROM stock ORDER BY symbol""")
