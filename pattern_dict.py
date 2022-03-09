@@ -1,56 +1,3 @@
-import pandas as pd
-from flask import Flask, request
-import yfinance as yf
-import os
-import talib
-import sqlite3
-from config import db_path
-
-# stocks = {}
-
-# Establish connection and cursor
-# connection = sqlite3.connect(db_path)
-# connection.row_factory = sqlite3.Row
-# cursor = connection.cursor()
-
-# Create a list of all symbols in my stock db
-# cursor.execute("""SELECT * FROM stock""")
-# stock_data = cursor.fetchall()
-
-#symbols_list = [i[1] for i in cursor.fetchall()]
-#print(symbols_list)
-
-# stock_df = pd.DataFrame(stock_data)
-#print(stock_df)
-
-# cursor.execute("""SELECT stock_id, date, open, high, low, close FROM stock_price ORDER BY date DESC""")
-# price_data = cursor.fetchall()
-
-# price_df = pd.DataFrame(price_data)
-# print(price_df.head())
-
-# print(price_df[2])
-# print(price_df[5])
-
-# for row in stock_data:
-#         stocks[row['id']] = {"Company": row['symbol']}
-
-#print(stocks)
-
-
-# REMEMBER***note to self***
-#print(df[2][0])
-
-# def grab_data():
-#     for symbol in symbols_list:
-#         stocks[symbol] = {"Company": symbol}
-#         #df = yf.download(symbol, start='2021-12-14', end='2022-01-14')
-#         #print(df)
-#     #print(stocks)
-
-#grab_data()
-
-
 
 patterns = {
     'CDL2CROWS':'Two Crows',
@@ -115,4 +62,80 @@ patterns = {
     'CDLUPSIDEGAP2CROWS':'Upside Gap Two Crows',
     'CDLXSIDEGAP3METHODS':'Upside/Downside Gap Three Methods'
 }
+
+
+# import pandas as pd
+# import yfinance as yf
+# import os
+# import talib
+# import sqlite3
+# from config import db_path
+# from datetime import date
+
+# #for x in patterns:
+#     #print(x[0])
+
+# pattern = 'CDLDOJI'
+# stocks = {}
+
+# # Establish connection and cursor
+# connection = sqlite3.connect(db_path)
+# connection.row_factory = sqlite3.Row
+# cursor = connection.cursor()
+
+# # Create a list of all symbols in my stock db
+# cursor.execute("""SELECT * FROM stock""")
+# #stock_data = cursor.fetchall()
+
+# # Make a symbols list
+# symbols_list = [i[1] for i in cursor.fetchall()]
+
+# # shorten list to speed up debugging process
+# # symbols_list = symbols_list[0:100]
+# #print(symbols_list)
+
+# #df = pd.DataFrame(symbols_list)
+# #print(df)
+
+# # cursor.execute("""SELECT stock_id, date, open, high, low, close FROM stock_price ORDER BY date DESC""")
+# # price_data = cursor.fetchall()
+
+# cursor.execute("""
+#     select symbol, name, stock_id, open, high, low, close, date
+#     from stock_price join stock on stock.id = stock_price.stock_id
+#     group by stock_id
+#     order by symbol
+# """)
+
+# price_data = cursor.fetchall()
+
+# price_df = pd.DataFrame(price_data)
+# #print(price_df)
+
+# for symbol in symbols_list:
+#     stocks[symbol] = {"Company": ""}
+
+# #print(stocks)
+
+
+# if pattern:
+#     for symbol in symbols_list:
+#         pattern_func = getattr(talib, pattern)
+#         try:
+#             result = pattern_func(price_df[3], price_df[4], price_df[5], price_df[6])
+#             #print(result)
+#             last = result.tail(1).values[0]
+#             if last > 0:
+#                 stocks[symbol][pattern] = "Bullish"
+#             elif last < 0:
+#                 stocks[symbol][pattern] = "Bearish"
+#             else:
+#                 stocks[symbol][pattern] = None
+#         except:
+#             pass
+
+# print(stocks)
+
+# REMEMBER***note to self***
+#print(df[2][0])
 

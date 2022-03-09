@@ -47,6 +47,7 @@
     border-width: 3px;
 }
 
+
 .card-title {
     font-weight: bold;
     font-size: 20px;
@@ -72,7 +73,15 @@ td {
     border-width: 2px;
 }
 
+.table-responsive {
+    max-height: 500px;
+    overflow-y: scroll;
+    overflow-x: auto;
+}
 
+body {
+    background-color: rgb(18, 96, 160);
+}
 
 
 
