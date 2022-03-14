@@ -72,45 +72,43 @@ patterns = {
 # from config import db_path
 # from datetime import date
 
-# #for x in patterns:
-#     #print(x[0])
+#for x in patterns:
+    #print(x[0])
 
 # pattern = 'CDLDOJI'
 # stocks = {}
 
-# # Establish connection and cursor
+# Establish connection and cursor
 # connection = sqlite3.connect(db_path)
 # connection.row_factory = sqlite3.Row
 # cursor = connection.cursor()
 
-# # Create a list of all symbols in my stock db
+# Create a list of all symbols in my stock db
 # cursor.execute("""SELECT * FROM stock""")
-# #stock_data = cursor.fetchall()
+#stock_data = cursor.fetchall()
 
-# # Make a symbols list
+# Make a symbols list
 # symbols_list = [i[1] for i in cursor.fetchall()]
 
-# # shorten list to speed up debugging process
-# # symbols_list = symbols_list[0:100]
-# #print(symbols_list)
+# shorten list to speed up debugging process
+# symbols_list = symbols_list[0:10]
+#print(symbols_list)
 
-# #df = pd.DataFrame(symbols_list)
-# #print(df)
+#df = pd.DataFrame(symbols_list)
+#print(df)
 
-# # cursor.execute("""SELECT stock_id, date, open, high, low, close FROM stock_price ORDER BY date DESC""")
-# # price_data = cursor.fetchall()
+# cursor.execute("""SELECT stock_id, date, open, high, low, close FROM stock_price ORDER BY date DESC""")
+# price_data = cursor.fetchall()
 
 # cursor.execute("""
 #     select symbol, name, stock_id, open, high, low, close, date
 #     from stock_price join stock on stock.id = stock_price.stock_id
-#     group by stock_id
-#     order by symbol
 # """)
 
 # price_data = cursor.fetchall()
 
 # price_df = pd.DataFrame(price_data)
-# #print(price_df)
+# print(price_df)
 
 # for symbol in symbols_list:
 #     stocks[symbol] = {"Company": ""}
@@ -120,11 +118,24 @@ patterns = {
 
 # if pattern:
 #     for symbol in symbols_list:
+#         cursor.execute("""
+#         select * from (
+#             select symbol, name, stock_id, open, high, low, close, date
+#             from stock_price join stock on stock.id = stock_price.stock_id
+#             group by stock_id
+#             order by date DESC
+#         ) where symbol = ?
+#         """, (symbol,))
+#         price_data = cursor.fetchall()
+#         price_df = pd.DataFrame(price_data)
+#         #print(price_df)
 #         pattern_func = getattr(talib, pattern)
 #         try:
 #             result = pattern_func(price_df[3], price_df[4], price_df[5], price_df[6])
 #             #print(result)
 #             last = result.tail(1).values[0]
+#             print(last)
+#             print(f'{symbol} triggered {pattern}')
 #             if last > 0:
 #                 stocks[symbol][pattern] = "Bullish"
 #             elif last < 0:
@@ -134,7 +145,7 @@ patterns = {
 #         except:
 #             pass
 
-# print(stocks)
+#print(stocks)
 
 # REMEMBER***note to self***
 #print(df[2][0])

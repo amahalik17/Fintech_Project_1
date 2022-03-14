@@ -26,23 +26,18 @@
   {% for stock in stocks %}
     {% if stocks[stock][current_pattern] %}
   <tr>
-    <td>{{ stock }}</td>
+    <td>{{ stocks }}</td>
     <td>{{ stocks[stock]['Company'] }}</td>
     <td class="{{ stocks[stock][current_pattern] }}">{{ stocks[stock][current_pattern] }}</td>
   </tr>
   <tr>
-    <td colspan="3">
+    <!-- <td colspan="3">
       <img src="https://finviz.com/chart.ashx?t={{ stock }}&ty=c&ta=1&p=d&s=l"/>
-    </td>
+    </td> -->
   </tr>
     {% endif %}
   {% endfor %}
 </table>
-
-
-
-
-
 
 
 
@@ -52,9 +47,6 @@
 
 
 {% block one %}
-
-
-
 
 {% endblock %}
 

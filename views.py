@@ -35,28 +35,36 @@ def pattern_scanner():
     cursor.execute("""SELECT * FROM stock""")
     #stock_data = cursor.fetchall()
     symbols_list = [i[1] for i in cursor.fetchall()]
+    symbols_list = symbols_list[6000:6020]
 
-    cursor.execute("""
-        select symbol, name, stock_id, open, high, low, close, date
-        from stock_price join stock on stock.id = stock_price.stock_id
-        group by stock_id
-        order by symbol
-    """)
-
-    price_data = cursor.fetchall()
-    price_df = pd.DataFrame(price_data)
+    # price_data = cursor.fetchall()
+    # price_df = pd.DataFrame(price_data)
     #print(price_df)
 
     for symbol in symbols_list:
-        stocks[symbol] = {"Company": ""}
+        stocks[symbol] = {'Company': symbol}
+    #print(stocks)
 
     if pattern:
         for symbol in symbols_list:
+            cursor.execute("""
+            select * from (
+                select symbol, name, stock_id, open, high, low, close, date
+                from stock_price join stock on stock.id = stock_price.stock_id
+                group by stock_id
+                order by date DESC
+            ) where symbol = ?
+            """, (symbol,))
+            price_data = cursor.fetchall()
+            price_df = pd.DataFrame(price_data)
+            #print(price_df)
             pattern_func = getattr(talib, pattern)
             try:
                 result = pattern_func(price_df[3], price_df[4], price_df[5], price_df[6])
                 #print(result)
                 last = result.tail(1).values[0]
+                print(last)
+                #print(f'{symbol} triggered {pattern}')
                 if last > 0:
                     stocks[symbol][pattern] = "Bullish"
                 elif last < 0:
